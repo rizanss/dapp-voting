@@ -13,7 +13,8 @@ contract Voting {
     event Voted(address indexed voter, uint candidateIndex);
     
     constructor(string[] memory candidateNames) {
-        for (uint i = 0; i < candidateNames.length; i++) {
+        uint length = candidateNames.length; // Cache length untuk gas efficiency
+        for (uint i = 0; i < length; i++) {
             candidates.push(Candidate(candidateNames[i], 0));
         }
     }
@@ -30,5 +31,10 @@ contract Voting {
 
     function getCandidates() public view returns (Candidate[] memory) {
         return candidates;
+    }
+
+    function getCandidateVoteCount(uint candidateIndex) public view returns (uint) {
+        require(candidateIndex < candidates.length, "Invalid candidate!");
+        return candidates[candidateIndex].voteCount;
     }
 }
